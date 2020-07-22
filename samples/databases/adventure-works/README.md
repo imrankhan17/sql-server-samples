@@ -93,3 +93,11 @@ Run `docker exec -it sql1 "bash"` and inside the container:
 /opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "<YourStrong@Passw0rd>" -i /home/instawdb.sql -o /home/logs.txt
 ```
 
+Database connection details:
+```
+Host: localhost
+Port: 1433
+Username: SA
+Password: <YourStrong@Passw0rd>
+```
+
