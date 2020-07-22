@@ -80,16 +80,16 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
    -v ~/Desktop/mssql:/home \
    -d mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
 
-wget "https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script/data.txt"
+GIT_DIR="https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script"
+
+wget $GIT_DIR/data.txt -O data.txt
+wget $GIT_DIR/instawdb.sql -O instawdb.sql
 
 while read p; do
-  wget "https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script/$p"
+  wget $GIT_DIR/$p -O $p
 done < data.txt
 
-wget "https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script/instawdb.sql"
-
 docker exec sql1 mkdir -p /tmp/data/
-
 docker exec sql1 bash -c 'mv /home/*.csv /tmp/data'
 ```
 
