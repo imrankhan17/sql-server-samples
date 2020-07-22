@@ -66,3 +66,35 @@ TO 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\Adventu
 
 ```
 
+## Install on Mac
+
+```shell script
+docker pull mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
+
+mkdir -p ~/Desktop/mssql/
+
+cd ~/Desktop/mssql/
+
+docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
+   -p 1433:1433 --name sql1 \
+   -v ~/Desktop/mssql:/home \
+   -d mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
+
+wget "https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script/data.txt"
+
+while read p; do
+  wget "https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script/$p"
+done < data.txt
+
+wget "https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script/instawdb.sql"
+
+docker exec sql1 mkdir -p /tmp/data/
+
+docker exec sql1 bash -c 'mv /home/*.csv /tmp/data'
+```
+
+Run `docker exec -it sql1 "bash"` and inside the container:
+```shell script
+/opt/mssql-tools/bin/sqlcmd -S localhost -U SA -P "<YourStrong@Passw0rd>" -i /home/instawdb.sql -o /home/logs.txt
+```
+
