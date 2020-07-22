@@ -69,11 +69,10 @@ TO 'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\Adventu
 ## Install on Mac
 
 ```shell script
-docker pull mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
-
 mkdir -p ~/Desktop/mssql/
-
 cd ~/Desktop/mssql/
+
+docker pull mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
 
 docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
    -p 1433:1433 --name sql1 \
@@ -81,13 +80,9 @@ docker run -e "ACCEPT_EULA=Y" -e "SA_PASSWORD=<YourStrong@Passw0rd>" \
    -d mcr.microsoft.com/mssql/server:2019-CU5-ubuntu-18.04
 
 GIT_DIR="https://raw.githubusercontent.com/imrankhan17/sql-server-samples/master/samples/databases/adventure-works/oltp-install-script"
-
 wget $GIT_DIR/data.txt -O data.txt
 wget $GIT_DIR/instawdb.sql -O instawdb.sql
-
-while read p; do
-  wget $GIT_DIR/$p -O $p
-done < data.txt
+while read p; do wget $GIT_DIR/$p -O $p done < data.txt
 
 docker exec sql1 mkdir -p /tmp/data/
 docker exec sql1 bash -c 'mv /home/*.csv /tmp/data'
